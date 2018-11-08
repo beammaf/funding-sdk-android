@@ -38,6 +38,7 @@ In order to use SDK you must be a registered developer with a provisioned API ke
  
         implementation "io.reactivex.rxjava2:rxjava:$RX_VERSION"
         implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
+        implementation 'com.annimon:stream:1.2.0'
     
         /* Networking */
         implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
