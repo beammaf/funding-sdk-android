@@ -118,10 +118,8 @@ FSSdk.getInstance().start(FSServer.STAGING, this, new FSInitializationListener()
   void addCreditCard(Activity activity, int requestCode);
 
   void addCreditCard(Activity activity, int requestCode, ActivityOptions options);
-
-  void verifyCard(CreditCard fundingSource, Activity activity, int requestCode);
-
-  void verifyCard(CreditCard fundingSource, Activity activity, int requestCode, ActivityOptions options);
+  
+  void verifyCard(Context context, String amount, CreditCard fundingSource, FSCallback<CreditCard> callback);
 
   void removeCreditCard(CreditCard fundingSources, FSCallback<Boolean> listener);
 
