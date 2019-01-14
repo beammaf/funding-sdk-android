@@ -111,17 +111,21 @@ FSSdk.getInstance().start(FSServer.STAGING, this, new FSInitializationListener()
     }
 
 
-  void start(@NonNull FSServer server, @NonNull FSTokenProvider tokenProvider, FSInitializationListener listener);
+    void start(@NonNull FSServer server, @NonNull FSTokenProvider tokenProvider, FSInitializationListener listener);
 
-  void getFundingSources(FSCallback<List<CreditCard>> callback);
+    void getFundingSources(FSCallback<List<CreditCard>> callback);
 
-  void addCreditCard(Activity activity, int requestCode);
+    void addCreditCard(Activity activity, int requestCode);
 
-  void addCreditCard(Activity activity, int requestCode, ActivityOptions options);
-  
-  void verifyCard(Context context, String amount, CreditCard fundingSource, FSCallback<CreditCard> callback);
+    void addCreditCard(Activity activity, int requestCode, ActivityOptions options);
+    
+    void verifyCard(Context context, String amount, CreditCard fundingSource, FSCallback<CreditCard> callback);
 
-  void removeCreditCard(CreditCard fundingSources, FSCallback<Boolean> listener);
+    void verifyCard(CreditCard fundingSource, Activity activity, int requestCode);
+
+    void verifyCard(CreditCard fundingSource, Activity activity, int requestCode, ActivityOptions options);
+
+    void removeCreditCard(CreditCard fundingSources, FSCallback<Boolean> listener);
 
 
   void clear();
@@ -211,7 +215,15 @@ This UI is fully customizable
 For more information about customizing UI, Please check "Customizing UI" section.
 
 ```java
- FSSdk.getInstance().verifyCard(event.getCreditCard(), view.getActivity(), VERIFY_CARD_REQUEST_CODE);
+FSSdk.getInstance().verifyCard(view.getContext(), amount, creditCard, new FSCallback<CreditCard>() {
+    @Override public void onSuccess(CreditCard result) {
+
+    }
+
+    @Override public void onError(FSError error) {
+
+    }
+});
 
 ```
 
@@ -412,123 +424,6 @@ In order to customize Add Credit card ui, **tps_add_card_layout.xml** should be 
 ```
 
 
-### Verify Credit Card Page
-In order to customize Verify Credit card ui, **tps_verify_card_layout.xml** should be added to project. TPS SDK automatically detects if tps_verify_card_layout.xml exists and render it to screen. This xml should contain this fields with specified ids.
-
-|  View Type   | Description       |id                |
-| ------------ | ----------------- |------------------ |
-|  EditText | Verify Ammount    |edtVerifyAmountTps |
-|  Button   | Submit Button     |edtSubmitVerifyTps |
-
-```xml
-<android.support.constraint.ConstraintLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:support="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-
-  <android.support.v7.widget.Toolbar
-    android:id="@+id/viewToolbar"
-    support:navigationIcon="@drawable/ic_arrow_back"
-    support:layout_constraintStart_toStartOf="parent"
-    support:layout_constraintEnd_toEndOf="parent"
-    support:layout_constraintTop_toTopOf="parent"
-    android:theme="@style/ThemeOverlay.AppCompat.Light"
-    android:minHeight="?android:attr/actionBarSize"
-    android:background="@color/colorPrimary"
-    support:titleTextColor="@color/colorToolbarTextAndIconTint"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content" />
-
-  <android.support.design.widget.TextInputLayout
-    android:id="@+id/viewTextInputLayout"
-    style="@style/Beam.TextInputLayout"
-    android:layout_marginBottom="@dimen/spacing_2x"
-    android:layout_marginStart="@dimen/spacing_9x"
-    android:layout_marginEnd="@dimen/spacing_2x"
-    android:layout_marginTop="@dimen/spacing_2x"
-    support:layout_constraintStart_toStartOf="parent"
-    support:layout_constraintEnd_toEndOf="parent"
-    support:layout_constraintTop_toBottomOf="@+id/viewToolbar"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content">
-
-    <android.support.design.widget.TextInputEditText
-      android:id="@+id/viewEditText"
-      android:inputType="numberDecimal"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
-
-  </android.support.design.widget.TextInputLayout>
-
-  <Button
-    android:id="@+id/viewButtonCharge"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/spacing_2x"
-    support:layout_constraintTop_toBottomOf="@+id/viewTextInputLayout"
-    support:layout_constraintEnd_toEndOf="parent"
-    style="@style/Beam.Button"
-    android:textAllCaps="true"
-    android:visibility="visible"
-    android:text="@string/label_done"/>
-
-  <ProgressBar
-    android:id="@+id/viewProgress"
-    android:layout_width="wrap_content"
-    android:layout_height="0dip"
-    android:theme="@style/Widget.AppCompat.ProgressBar"
-    support:layout_constraintTop_toTopOf="@+id/viewButtonCharge"
-    support:layout_constraintEnd_toEndOf="@+id/viewButtonCharge"
-    support:layout_constraintBottom_toBottomOf="@+id/viewButtonCharge" />
-
-  <TextView
-    android:id="@+id/viewTextTitle"
-    style="@style/Beam.Text.H4"
-    android:layout_marginStart="@dimen/spacing_9x"
-    android:layout_marginEnd="@dimen/spacing_2x"
-    support:layout_constraintStart_toStartOf="parent"
-    support:layout_constraintEnd_toEndOf="parent"
-    support:layout_constraintTop_toBottomOf="@+id/viewButtonCharge"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/spacing_4x"
-    android:textColor="@color/beam_grey"
-    android:typeface="monospace"/>
-
-  <TextView
-    style="@style/Beam.Text.S"
-    android:id="@+id/viewTextMessage"
-    android:layout_marginTop="@dimen/spacing_4x"
-    support:layout_constraintTop_toBottomOf="@+id/viewTextTitle"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/spacing_9x"
-    android:layout_marginEnd="@dimen/spacing_2x"
-    support:layout_constraintStart_toStartOf="parent"
-    support:layout_constraintEnd_toEndOf="parent"
-    android:text="@string/label_limits_apply_until_verified"
-    android:textColor="@color/beam_grey_light"
-    android:typeface="monospace"/>
-
-  <TextView
-    android:id="@+id/viewTextLink"
-    style="@style/Beam.Text.S"
-    support:layout_constraintTop_toBottomOf="@+id/viewTextMessage"
-    android:layout_width="0dip"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/spacing_9x"
-    android:layout_marginEnd="@dimen/spacing_2x"
-    support:layout_constraintStart_toStartOf="parent"
-    support:layout_constraintEnd_toEndOf="parent"
-    android:layout_marginTop="@dimen/spacing_2x"
-    android:textColor="@color/beam_grey_light"
-    android:textColorHighlight="@color/beam_cta_20"
-    android:textColorLink="@color/beam_cta"
-    android:typeface="monospace" />
-
-</android.support.constraint.ConstraintLayout>
-```
 
 
 
