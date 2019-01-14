@@ -208,11 +208,6 @@ public void activityResult(int requestCode, int resultCode, Intent data) {
 ```
 
 ### Verify Credit Card
-In order to verify credit card, there is a function called verifyCreditCard(). This function is going to launch verifyCreditCardActivity which is inside the Funding SDK.
-
-This UI is fully customizable
-
-For more information about customizing UI, Please check "Customizing UI" section.
 
 ```java
 FSSdk.getInstance().verifyCard(view.getContext(), amount, creditCard, new FSCallback<CreditCard>() {
@@ -225,20 +220,6 @@ FSSdk.getInstance().verifyCard(view.getContext(), amount, creditCard, new FSCall
     }
 });
 
-```
-
-This function launch an activity for result. 
-
-```java
-public void activityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == VERIFY_CARD_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (data != null) {
-                    CreditCard card = (CreditCard) data.getSerializableExtra(FSSdk.BUNDLE_CARD_OPERATION_RESULT);
-                }
-            }
-        }
-}
 ```
 
 
